@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+	<fields name="fieldparams">
+		<fieldset name="fieldparams" addfieldpath="/plugins/fields/cgzipcode/fields">
+			<field
+				name="country"
+				type="text" default="fr"
+				label="PLG_FIELDS_CGZIPCODE_COUNTRY_LABEL"
+				description="PLG_FIELDS_CGZIPCODE_COUNTRY_DESC"
+			/>
+			<field
+				name="maxlength"
+				type="number" default="5"
+				label="PLG_FIELDS_CGZIPCODE_MAXLENGTH_LABEL"
+				description="PLG_FIELDS_CGZIPCODE_MAXLENGTH_DESC"
+			/>
+   			<field name="showcity" type="radio" class="btn-group btn-group-yesno"
+				default="true" 	label="PLG_FIELDS_CGZIPCODE_SHOW_CITY" description="PLG_FIELDS_CGZIPCODE_SHOW_CITY_DESC">
+				<option value="true">JYES</option>
+				<option value="false">JNO</option>
+			</field>
+
+   			<field  name="showinsee" type="radio" class="btn-group btn-group-yesno"
+				default="true" 	label="PLG_FIELDS_CGZIPCODE_SHOW_INSEE" description="PLG_FIELDS_CGZIPCODE_SHOW_INSEE_DESC">
+				<option value="true">JYES</option>
+				<option value="false">JNO</option>
+			</field>
+   			<field  name="showgps" type="radio" class="btn-group btn-group-yesno"
+				default="true" 	label="PLG_FIELDS_CGZIPCODE_SHOW_GPS" description="PLG_FIELDS_CGZIPCODE_SHOW_GPS_DESC">
+				<option value="true">JYES</option>
+				<option value="false">JNO</option>
+			</field>
+		</fieldset>
+	</fields>
+</form>

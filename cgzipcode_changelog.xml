@@ -1,0 +1,14 @@
+<changelogs>
+	<changelog>
+		<element>cgzipcode</element>
+		<type>plugin</type>
+		<group>fields</group>
+		<version>2.0.0</version>
+        <note>
+            <item>Update : 14/11/2022</item>
+        </note>
+         <change>
+            <item>Joomla 4.x version</item>
+        </change>
+	</changelog>
+</changelogs>

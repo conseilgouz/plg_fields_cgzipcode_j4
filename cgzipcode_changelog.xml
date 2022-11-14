@@ -3,6 +3,18 @@
 		<element>cgzipcode</element>
 		<type>plugin</type>
 		<group>fields</group>
+		<version>2.0.2</version>
+        <note>
+            <item>Update : 14/11/2022</item>
+        </note>
+         <fix>
+            <item>packaging error</item>
+        </fix>
+	</changelog>
+	<changelog>
+		<element>cgzipcode</element>
+		<type>plugin</type>
+		<group>fields</group>
 		<version>2.0.1</version>
         <note>
             <item>Update : 14/11/2022</item>

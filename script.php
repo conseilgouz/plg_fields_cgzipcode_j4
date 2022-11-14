@@ -90,6 +90,7 @@ class plgfieldscgzipcodeInstallerScript
 				File::delete($file);
 			}
 		}
+		// enable plugin
 		$db = Factory::getDbo();
         $conditions = array(
             $db->qn('type') . ' = ' . $db->q('plugin'),
@@ -107,13 +108,11 @@ class plgfieldscgzipcodeInstallerScript
             JLog::add('unable to enable '.$this->name, JLog::ERROR, 'jerror');
         }
 		// remove obsolete update sites
-		$db = Factory::getDbo();
 		$query = $db->getQuery(true)
 			->delete('#__update_sites')
 			->where($db->quoteName('location') . ' like "%432473037d.url-de-test.ws/%"');
 		$db->setQuery($query);
 		$db->execute();
-		// Simple Isotope is now on Github
 		$query = $db->getQuery(true)
 			->delete('#__update_sites')
 			->where($db->quoteName('location') . ' like "%conseilgouz.com/updates/plg_fields_cgzipcode_%"');

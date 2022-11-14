@@ -2,7 +2,7 @@
 /*
 ; Fields CG ZipCode
 ; Recuperation des donnees GPS, nom d'une ville depuis geo.api.gouv.fr
-; Version			: 2.0.0
+; Version			: 2.0.1
 ; Package			: Joomla 4.x
 ; copyright 		: Copyright (C) 2022 ConseilGouz. All rights reserved.
 ; license    		: http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
@@ -12,7 +12,7 @@
 defined('_JEXEC') or die('Restricted access');
 use Joomla\CMS\Factory;
 use Joomla\CMS\Form\FormField;
-
+use Joomla\CMS\HTML\HTMLHelper;
 class JFormFieldCGZipCode extends FormField
 {
     protected $type = 'CGZipCode';
@@ -35,6 +35,7 @@ class JFormFieldCGZipCode extends FormField
 		$def_form .= '<input type="hidden" name="'.$this->name.'" id="'.$this->id.'" value="' . $this->value . '" />';
 		$def_form .= '<input type="hidden" name="cgzipfid" id="cgzipfid" value="'.$this->id.'" data-id="'.$this->id.'" data-country="'.$country.'" data-maxlength="'.$maxlength.'"/>';
 		$def_form .= '<input type="text" name="cgzipcode" id="cgzipcodeid" value="'.$zipcode.'" class="cgzipcode" style="max-width:'.($maxlength + 2).'em"/>';
+		$def_form .= HTMLHelper::_('select.genericlist',array(), 'cgzipcode', "class=\"inputbox\" style=\"margin:0;display:none\"", 'value', 'text', null,'CG_TS_Select'); 
 		$cgstyle = "";
 		if ($zipcode == '') $cgstyle= " style='display:none'";
 		$def_form .= '<span class="cglibs" '.$cgstyle.'>';

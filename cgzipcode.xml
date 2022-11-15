@@ -7,7 +7,7 @@
 	<license>GNU General Public License version 2 or later; see LICENSE.txt</license>
 	<authorEmail>pascal.leconte@conseilgouz.com</authorEmail>
 	<authorUrl>www.conseilgouz.com</authorUrl>
-	<version>2.0.2</version>
+	<version>2.0.3</version>
 	<description>PLG_FIELDS_CGZIPCODE_XML_DESC</description>
 	<files>
 		<filename plugin="cgzipcode">cgzipcode.php</filename>

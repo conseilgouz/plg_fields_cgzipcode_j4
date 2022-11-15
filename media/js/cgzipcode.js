@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', function() {
 	cglat = document.querySelector(".cglat")
 	cglibs = document.querySelector(".cglibs")
 	cgzip =  document.querySelector("input.cgzipcode")
-	onelist = document.getElementById("CG_TS_Select");
+	onelist = document.getElementById("cgzip_select");
 	['click', 'touchstart', 'mouseup','keyup' ].forEach(type => {
 		cgzip.addEventListener(type,function(){ 
 			cgzipfid = document.querySelector('#cgzipfid');
@@ -75,12 +75,7 @@ function getZipFr(e,url,maxlength) {
 				$res = document.querySelector("#"+$val);
 				if (r.nhits == 0) {
 					result.innerHTML = "Aucune réponse."
-					city.value = "";city.innerHTML = "";
-					insee.value = "";insee.innerHTML = "";
-					insee.value = ""; insee.innerHTML ="" ;
-					cglong.value = ""; cglong.innerHTML = "";
-					cglat.value = "";cglat.innerHTML ="";
-					cglibs.style.display = 'none';
+					cleardisplay;
 					onelist.style.display = "none"
 				}
 				if (r.nhits ===1) {
@@ -97,34 +92,24 @@ function getZipFr(e,url,maxlength) {
 					onelist.style.display = "none"
 				}
 				if (r.nhits > 1) {
-					result.innerHTML = ""
-					city.value = "";city.innerHTML = "";
-					insee.value = "";insee.innerHTML = "";
-					insee.value = ""; insee.innerHTML ="" ;
-					cglong.value = ""; cglong.innerHTML = "";
-					cglat.value = "";cglat.innerHTML ="";
-					cglibs.style.display = 'none';
-					document.querySelectorAll('#CG_TS_Select option').forEach(option => option.remove()); // cleanup
+					result.innerHTML = "";
+					cleardisplay;
+					document.querySelectorAll('#cgzip_select option').forEach(option => option.remove()); // cleanup
 					empty = document.createElement("option");
 					empty.text = " "+r.records.length+" communes---";
 					empty.value = "";
-					onelist.add(empty); // option vide
+					arr = new Array();
+					arr.push(empty);
 					r.records.forEach(onezip => { 
 						opt = document.createElement("option");
 						opt.text = onezip.fields.nom_comm;
 						opt.value = onezip.fields.postal_code + '%26name:' + onezip.fields.nom_comm;
-						onelist.add(opt);
+						arr.push(opt);
 					})	
-					// tri des communes ordre alpha
-					arr = new Array(); 
-					for(i = 0; i < onelist.length; i++) { 
-						arr[i] = onelist.options[i]; 
-					} 
 					arr.sort(function(a,b) {
 						return (a.text > b.text)? 1 : ((a.text < b.text)? -1 : 0);
 					});  
-					document.querySelectorAll('#CG_TS_Select option').forEach(option => option.remove()); // cleanup
-					for(i = 0; i < arr.length; i++) { // sorted array
+					for(i = 0; i < arr.length; i++) { 
 						onelist.add(arr[i]);
 					}	
 					onelist.options[0].selected = true;	// set 1st option selected (empty)				
@@ -156,12 +141,7 @@ function getZipWorld(e,url,maxlength) {
 				$res = document.querySelector("#"+$val);
 				if (r.length != 1) {
 					result.innerHTML = r.length+" anwer(s) found. need more information."
-					city.value = "";city.innerHTML = "";
-					insee.value = "";insee.innerHTML = "";
-					insee.value = ""; insee.innerHTML ="" ;
-					cglong.value = ""; cglong.innerHTML = "";
-					cglat.value = "";cglat.innerHTML ="";
-					cglibs.style.display = 'none';
+					cleardisplay;
 				}
 				if (r.length ===1) {
 					result.innerHTML = ""
@@ -181,5 +161,12 @@ function getZipWorld(e,url,maxlength) {
 		}
 		xhr.send(null);
 	},callDelay);
-	
+}
+function cleardisplay() {
+	city.value = "";city.innerHTML = "";
+	insee.value = "";insee.innerHTML = "";
+	insee.value = ""; insee.innerHTML ="" ;
+	cglong.value = ""; cglong.innerHTML = "";
+	cglat.value = "";cglat.innerHTML ="";
+	cglibs.style.display = 'none';
 }

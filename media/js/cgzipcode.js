@@ -1,7 +1,7 @@
 /*
 ; Fields CG Zip Code : jQuery version
 ; Recuperation des donnees GPS, nom d'une ville depuis geo.api.gouv.fr/openstreetmap
-; Version			: 2.0.1
+; Version			: 2.0.4
 ; Package			: Joomla 4.x
 ; copyright 		: Copyright (C) 2022 ConseilGouz. All rights reserved.
 ; license    		: http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
@@ -11,6 +11,7 @@
 var timeout,callDelay=500,
 	city,insee,cglong,cglat,cglibs,cgzip,cgzipfid,onelist,
 	apiUrl="https://public.opendatasoft.com/api/records/1.0/search/?dataset=correspondance-code-insee-code-postal&q=postal_code:",
+	apiCedex ="https://public.opendatasoft.com/api/records/1.0/search/?dataset=correspondance-code-cedex-code-insee&q=code:",
 	apiWorld="https://nominatim.openstreetmap.org/search?format=json&addressdetails=1&country=";
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -27,19 +28,14 @@ document.addEventListener('DOMContentLoaded', function() {
 			cgzipfid = document.querySelector('#cgzipfid');
 			maxlength = cgzipfid.getAttribute('data-maxlength')
 			if (cgzip.value.length < maxlength ) {
-					city.value = "";city.innerHTML = "";
-					insee.value = "";insee.innerHTML = "";
-					insee.value = ""; insee.innerHTML ="" ;
-					cglong.value = ""; cglong.innerHTML = "";
-					cglat.value = "";cglat.innerHTML ="";
-					cglibs.style.display = 'none';
+				cleardisplay();
 				return
 			}
 			country = cgzipfid.getAttribute('data-country');
-			var e=cgzip.value;
+			var e=cgzip.value ;
 			if (country=='fr') {
 				url = apiUrl;
-				getZipFr(e,url,maxlength)
+				getZipFr(e,url,maxlength,false)
 			} else {
 				url=apiWorld+country+"&accept-language="+country+"&postalcode="; 
 				getZipWorld(e,url,maxlength)
@@ -51,19 +47,27 @@ document.addEventListener('DOMContentLoaded', function() {
 		if (sel) {
 			country = cgzipfid.getAttribute('data-country');
 			url = apiUrl;
-			getZipFr(sel,url,maxlength);
+			getZipFr(sel,url,maxlength,false);
 		}
 	})
 	
 });
-function getZipFr(e,url,maxlength) {
+function handleCedexChange(event) {
+	cleardisplay();
+	url = apiCedex;
+	sel = cgzip.value;
+	getZipFr(sel,url,maxlength,true);
+}
+function getZipFr(e,url,maxlength,is_cedex) {
 	result = document.querySelector("#cg_result");
+	cleardisplay();
+	result.style.display = 'inline-flex';
 	result.innerHTML = "Chargement...";
 	timeout;
 	clearTimeout(timeout),
 	timeout=setTimeout(function(){
 		const xhr = new XMLHttpRequest();
-		xhr.open('GET', url+e, true); // Set the headers
+		xhr.open('GET', url+e+ "&rows=100", true); // Set the headers
 		xhr.onreadystatechange = () => {
         // Request not finished
 			if (xhr.readyState !== 4) {
@@ -74,26 +78,34 @@ function getZipFr(e,url,maxlength) {
 				$val = cgzipfid.value;
 				$res = document.querySelector("#"+$val);
 				if (r.nhits == 0) {
-					result.innerHTML = "Aucune réponse."
-					cleardisplay;
-					onelist.style.display = "none"
+					result.innerHTML = "Aucune réponse.&nbsp;";
+					if (!is_cedex) 
+						result.innerHTML +="<label for='cgzipcedex'>Recherche Cedex ?</label><input type='checkbox' id='cgzipcedex' value='0' class='form-check-input valid form-control-success' aria-invalid='false' onchange='handleCedexChange(event)'>";
+					onelist.style.display = "none";
 				}
 				if (r.nhits ===1) {
 					result.innerHTML = ""
-					city.innerHTML = r.records[0].fields.nom_comm; city.value = r.records[0].fields.nom_comm;
-					insee.innerHTML = r.records[0].fields.insee_com; insee.value = r.records[0].fields.insee_com;
-					cglat.innerHTML = r.records[0].fields.geo_point_2d[0].toString().substring(0,8);
-					cglat.value = r.records[0].fields.geo_point_2d[0].toString().substring(0,8);
-					cglong.innerHTML = r.records[0].fields.geo_point_2d[1].toString().substring(0,8)
-					cglong.value = r.records[0].fields.geo_point_2d[1].toString().substring(0,8);
-					cgzip.value = r.records[0].fields.postal_code.substring(0,maxlength);
-					cglibs.style.display = 'block';
-					$res.value = r.records[0].fields.postal_code.substring(0,maxlength)+'|'+r.records[0].fields.nom_comm+'|'+r.records[0].fields.insee_com+'|'+r.records[0].fields.geo_point_2d[0].toString().substring(0,8)+'|'+r.records[0].fields.geo_point_2d[1].toString().substring(0,8);
+					if (is_cedex) {
+						city.innerHTML = r.records[0].fields.libelle; city.value = r.records[0].fields.libelle;
+						insee.innerHTML = r.records[0].fields.insee; insee.value = r.records[0].fields.insee;
+						cgzip.value = r.records[0].fields.code.substring(0,maxlength);
+						cglibs.style.display = 'inline-flex';
+						$res.value = r.records[0].fields.code.substring(0,maxlength)+'|'+r.records[0].fields.libelle+'|'+r.records[0].fields.insee;
+					} else {
+						city.innerHTML = r.records[0].fields.nom_comm; city.value = r.records[0].fields.nom_comm;
+						insee.innerHTML = r.records[0].fields.insee_com; insee.value = r.records[0].fields.insee_com;
+						cglat.innerHTML = r.records[0].fields.geo_point_2d[0].toString().substring(0,8);
+						cglat.value = r.records[0].fields.geo_point_2d[0].toString().substring(0,8);
+						cglong.innerHTML = r.records[0].fields.geo_point_2d[1].toString().substring(0,8)
+						cglong.value = r.records[0].fields.geo_point_2d[1].toString().substring(0,8);
+						cgzip.value = r.records[0].fields.postal_code.substring(0,maxlength);
+						cglibs.style.display = 'inline-flex';
+						$res.value = r.records[0].fields.postal_code.substring(0,maxlength)+'|'+r.records[0].fields.nom_comm+'|'+r.records[0].fields.insee_com+'|'+r.records[0].fields.geo_point_2d[0].toString().substring(0,8)+'|'+r.records[0].fields.geo_point_2d[1].toString().substring(0,8);
+					}
 					onelist.style.display = "none"
 				}
 				if (r.nhits > 1) {
 					result.innerHTML = "";
-					cleardisplay;
 					document.querySelectorAll('#cgzip_select option').forEach(option => option.remove()); // cleanup
 					empty = document.createElement("option");
 					empty.text = " "+r.records.length+" communes---";
@@ -116,7 +128,7 @@ function getZipFr(e,url,maxlength) {
 					onelist.style.display = "inline-flex";
 				}
 			} else {
-			onError.call(window, xhr);
+					console.log("Erreur xhr");
 			}
 		}
 		xhr.send(null);
@@ -141,7 +153,7 @@ function getZipWorld(e,url,maxlength) {
 				$res = document.querySelector("#"+$val);
 				if (r.length != 1) {
 					result.innerHTML = r.length+" anwer(s) found. need more information."
-					cleardisplay;
+					cleardisplay();
 				}
 				if (r.length ===1) {
 					result.innerHTML = ""

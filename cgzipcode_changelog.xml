@@ -3,6 +3,18 @@
 		<element>cgzipcode</element>
 		<type>plugin</type>
 		<group>fields</group>
+		<version>2.0.4</version>
+        <note>
+            <item>Update : 15/11/2022</item>
+        </note>
+        <addition>
+            <item>fr : search in cedex if not found</item>
+        </addition>
+	</changelog>
+	<changelog>
+		<element>cgzipcode</element>
+		<type>plugin</type>
+		<group>fields</group>
 		<version>2.0.3</version>
         <note>
             <item>Update : 15/11/2022</item>

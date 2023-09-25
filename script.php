@@ -1,8 +1,8 @@
 <?php
 /**
 * CG ZipCode Plugin  - Joomla 4.x Module 
-* Version			: 2.0.0
-* copyright 		: Copyright (C) 2022 ConseilGouz. All rights reserved.
+* Version			: 2.1.0
+* copyright 		: Copyright (C) 2023 ConseilGouz. All rights reserved.
 * license    		: http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
 */
 // No direct access to this file
@@ -66,7 +66,7 @@ class plgfieldscgzipcodeInstallerScript
     }
 	private function postinstall_cleanup() {
 
-		$obsloteFolders = ['language','assets'];
+		$obsloteFolders = ['language','assets','fields'];
 		// Remove plugins' files which load outside of the component. If any is not fully updated your site won't crash.
 		foreach ($obsloteFolders as $folder)
 		{
@@ -84,12 +84,14 @@ class plgfieldscgzipcodeInstallerScript
 			sprintf("%s/language/en-GB/en-GB.plg_fields_%s.sys.ini", JPATH_ADMINISTRATOR, $this->extname),
 			sprintf("%s/language/fr-FR/fr-FR.plg_fields_%s.ini", JPATH_ADMINISTRATOR, $this->extname),
 			sprintf("%s/language/fr-FR/fr-FR.plg_fields_%s.sys.ini", JPATH_ADMINISTRATOR, $this->extname),
+			
 		];
 		foreach ($langFiles as $file) {
 			if (@is_file($file)) {
 				File::delete($file);
 			}
 		}
+
 		// enable plugin
 		$db = Factory::getDbo();
         $conditions = array(

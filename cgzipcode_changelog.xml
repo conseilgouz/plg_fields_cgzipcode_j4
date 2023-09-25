@@ -3,6 +3,21 @@
 		<element>cgzipcode</element>
 		<type>plugin</type>
 		<group>fields</group>
+		<version>2.1.0</version>
+        <note>
+            <item>Update : 25/09/2023</item>
+        </note>
+        <fix>
+            <item>Joomla 5.x compatibility</item>
+        </fix>
+		<change>
+			<item>Convert field plugin to service provider</item>
+		</change>
+	</changelog>
+	<changelog>
+		<element>cgzipcode</element>
+		<type>plugin</type>
+		<group>fields</group>
 		<version>2.0.4</version>
         <note>
             <item>Update : 15/11/2022</item>

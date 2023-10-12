@@ -33,8 +33,9 @@ return new class () implements ServiceProviderInterface {
         $container->set(
             PluginInterface::class,
             function (Container $container) {
+				$dispatcher = $container->get(DispatcherInterface::class);
                 $plugin     = new Cgzipcode(
-                    $container->get(DispatcherInterface::class),
+                    $dispatcher,
                     (array) PluginHelper::getPlugin('fields', 'cgzipcode')
                 );
                 $plugin->setApplication(Factory::getApplication());

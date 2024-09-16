@@ -3,6 +3,19 @@
 		<element>cgzipcode</element>
 		<type>plugin</type>
 		<group>fields</group>
+		<version>2.1.2</version>
+        <note>
+            <item>Update : 16/09/2024</item>
+        </note>
+        <fix>
+            <item>CGAddress plugin conflict</item>
+            <item>Script.php : missing delete function</item>
+        </fix>
+	</changelog>
+	<changelog>
+		<element>cgzipcode</element>
+		<type>plugin</type>
+		<group>fields</group>
 		<version>2.1.1</version>
         <note>
             <item>Update : 12/10/2023</item>

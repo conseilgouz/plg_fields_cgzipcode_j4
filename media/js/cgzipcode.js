@@ -1,40 +1,39 @@
 /*
-; Fields CG Zip Code : jQuery version
+; Fields CG Zip Code 
 ; Recuperation des donnees GPS, nom d'une ville depuis geo.api.gouv.fr/openstreetmap
-; Version			: 2.0.4
-; Package			: Joomla 4.x
-; copyright 		: Copyright (C) 2022 ConseilGouz. All rights reserved.
-; license    		: http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
+; Package			: Joomla 4.x/5.x
+; copyright 		: Copyright (C) 2024 ConseilGouz. All rights reserved.
+; license    		: https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
 ; depuis une idée de Yann (alias Daneel) dans son module MeteoFr suite à une discussion du forum Joomla : https://forum.joomla.fr/forum/joomla-3-x/administration/gestion-des-articles-ad/226900-article-non-s%C3%A3%C2%A9curis%C3%A3%C2%A9-en-https-avec-la-vignette-m%C3%A3%C2%A9t%C3%A3%C2%A9o-france
 ; adaptation pour récupérer les codes GPS de la ville et vérification du nombre de reponses
 */
-var timeout,callDelay=500,
-	city,insee,cglong,cglat,cglibs,cgzip,cgzipfid,onelist,
-	apiUrl="https://public.opendatasoft.com/api/records/1.0/search/?dataset=correspondance-code-insee-code-postal&q=postal_code:",
-	apiCedex ="https://public.opendatasoft.com/api/records/1.0/search/?dataset=correspondance-code-cedex-code-insee&q=code:",
+var ziptimeout,zipcallDelay=500,
+	zipcity,insee,ziplong,ziplat,ziplibs,cgzip,cgzipfid,ziponelist,
+	zipapiUrl="https://public.opendatasoft.com/api/records/1.0/search/?dataset=correspondance-code-insee-code-postal&q=postal_code:",
+	zipapiCedex ="https://public.opendatasoft.com/api/records/1.0/search/?dataset=correspondance-code-cedex-code-insee&q=code:",
 	apiWorld="https://nominatim.openstreetmap.org/search?format=json&addressdetails=1&country=";
 
 document.addEventListener('DOMContentLoaded', function() {
 // opendatasoft request : France only
-	city = document.querySelector(".cgcity")
+	zipcity = document.querySelector(".cgcity")
 	insee = document.querySelector(".cginsee")
-	cglong = document.querySelector(".cglong")
-	cglat = document.querySelector(".cglat")
-	cglibs = document.querySelector(".cglibs")
+	ziplong = document.querySelector(".ziplong")
+	ziplat = document.querySelector(".ziplat")
+	ziplibs = document.querySelector(".ziplibs")
 	cgzip =  document.querySelector("input.cgzipcode")
-	onelist = document.getElementById("cgzip_select");
+	ziponelist = document.getElementById("cgzip_select");
 	['click', 'touchstart', 'mouseup','keyup' ].forEach(type => {
 		cgzip.addEventListener(type,function(){ 
 			cgzipfid = document.querySelector('#cgzipfid');
 			maxlength = cgzipfid.getAttribute('data-maxlength')
 			if (cgzip.value.length < maxlength ) {
-				cleardisplay();
+				clearzip();
 				return
 			}
 			country = cgzipfid.getAttribute('data-country');
 			var e=cgzip.value ;
 			if (country=='fr') {
-				url = apiUrl;
+				url = zipapiUrl;
 				getZipFr(e,url,maxlength,false)
 			} else {
 				url=apiWorld+country+"&accept-language="+country+"&postalcode="; 
@@ -42,25 +41,25 @@ document.addEventListener('DOMContentLoaded', function() {
 			}
 		})							
 	})
-	onelist.addEventListener('change',function() {
+	ziponelist.addEventListener('change',function() {
 		sel = this.selectedOptions[0].value;
 		if (sel) {
 			country = cgzipfid.getAttribute('data-country');
-			url = apiUrl;
+			url = zipapiUrl;
 			getZipFr(sel,url,maxlength,false);
 		}
 	})
 	
 });
 function handleCedexChange(event) {
-	cleardisplay();
-	url = apiCedex;
+	clearzip();
+	url = zipapiCedex;
 	sel = cgzip.value;
 	getZipFr(sel,url,maxlength,true);
 }
 function getZipFr(e,url,maxlength,is_cedex) {
-	result = document.querySelector("#cg_result");
-	cleardisplay();
+	result = document.querySelector("#zip_result");
+	clearzip();
 	result.style.display = 'inline-flex';
 	result.innerHTML = "Chargement...";
 	timeout;
@@ -81,28 +80,28 @@ function getZipFr(e,url,maxlength,is_cedex) {
 					result.innerHTML = "Aucune réponse.&nbsp;";
 					if (!is_cedex) 
 						result.innerHTML +="<label for='cgzipcedex'>Recherche Cedex ?</label><input type='checkbox' id='cgzipcedex' value='0' class='form-check-input valid form-control-success' aria-invalid='false' onchange='handleCedexChange(event)'>";
-					onelist.style.display = "none";
+					ziponelist.style.display = "none";
 				}
 				if (r.nhits ===1) {
 					result.innerHTML = ""
 					if (is_cedex) {
-						city.innerHTML = r.records[0].fields.libelle; city.value = r.records[0].fields.libelle;
+						zipcity.innerHTML = r.records[0].fields.libelle; zipcity.value = r.records[0].fields.libelle;
 						insee.innerHTML = r.records[0].fields.insee; insee.value = r.records[0].fields.insee;
 						cgzip.value = r.records[0].fields.code.substring(0,maxlength);
-						cglibs.style.display = 'inline-flex';
+						ziplibs.style.display = 'inline-flex';
 						$res.value = r.records[0].fields.code.substring(0,maxlength)+'|'+r.records[0].fields.libelle+'|'+r.records[0].fields.insee;
 					} else {
-						city.innerHTML = r.records[0].fields.nom_comm; city.value = r.records[0].fields.nom_comm;
+						zipcity.innerHTML = r.records[0].fields.nom_comm; zipcity.value = r.records[0].fields.nom_comm;
 						insee.innerHTML = r.records[0].fields.insee_com; insee.value = r.records[0].fields.insee_com;
-						cglat.innerHTML = r.records[0].fields.geo_point_2d[0].toString().substring(0,8);
-						cglat.value = r.records[0].fields.geo_point_2d[0].toString().substring(0,8);
-						cglong.innerHTML = r.records[0].fields.geo_point_2d[1].toString().substring(0,8)
-						cglong.value = r.records[0].fields.geo_point_2d[1].toString().substring(0,8);
+						ziplat.innerHTML = r.records[0].fields.geo_point_2d[0].toString().substring(0,8);
+						ziplat.value = r.records[0].fields.geo_point_2d[0].toString().substring(0,8);
+						ziplong.innerHTML = r.records[0].fields.geo_point_2d[1].toString().substring(0,8)
+						ziplong.value = r.records[0].fields.geo_point_2d[1].toString().substring(0,8);
 						cgzip.value = r.records[0].fields.postal_code.substring(0,maxlength);
-						cglibs.style.display = 'inline-flex';
+						ziplibs.style.display = 'inline-flex';
 						$res.value = r.records[0].fields.postal_code.substring(0,maxlength)+'|'+r.records[0].fields.nom_comm+'|'+r.records[0].fields.insee_com+'|'+r.records[0].fields.geo_point_2d[0].toString().substring(0,8)+'|'+r.records[0].fields.geo_point_2d[1].toString().substring(0,8);
 					}
-					onelist.style.display = "none"
+					ziponelist.style.display = "none"
 				}
 				if (r.nhits > 1) {
 					result.innerHTML = "";
@@ -122,24 +121,23 @@ function getZipFr(e,url,maxlength,is_cedex) {
 						return (a.text > b.text)? 1 : ((a.text < b.text)? -1 : 0);
 					});  
 					for(i = 0; i < arr.length; i++) { 
-						onelist.add(arr[i]);
+						ziponelist.add(arr[i]);
 					}	
-					onelist.options[0].selected = true;	// set 1st option selected (empty)				
-					onelist.style.display = "inline-flex";
+					ziponelist.options[0].selected = true;	// set 1st option selected (empty)				
+					ziponelist.style.display = "inline-flex";
 				}
 			} else {
 					console.log("Erreur xhr");
 			}
 		}
 		xhr.send(null);
-	},callDelay);
+	},zipcallDelay);
 }
 function getZipWorld(e,url,maxlength) {
-	result = document.querySelector("#cg_result");
+	result = document.querySelector("#zip_result");
 	result.innerHTML = "Loading...";
-	timeout;
-	clearTimeout(timeout),
-	timeout=setTimeout(function(){
+	clearTimeout(ziptimeout),
+	ziptimeout=setTimeout(function(){
 		const xhr = new XMLHttpRequest();
 		xhr.open('GET', url+e, true); // Set the headers
 		xhr.onreadystatechange = () => {
@@ -153,18 +151,18 @@ function getZipWorld(e,url,maxlength) {
 				$res = document.querySelector("#"+$val);
 				if (r.length != 1) {
 					result.innerHTML = r.length+" anwer(s) found. need more information."
-					cleardisplay();
+					clearzip();
 				}
 				if (r.length ===1) {
 					result.innerHTML = ""
-					city.innerHTML = r[0].display_name; city.value = r[0].display_name;
+					zipcity.innerHTML = r[0].display_name; zipcity.value = r[0].display_name;
 					insee.innerHTML = r[0].place_id; insee.value = r[0].place_id;
-					cglat.innerHTML = r[0].lat.toString().substring(0,8);
-					cglat.value = r[0].lat.toString().substring(0,8);
-					cglong.innerHTML = r[0].lon.toString().substring(0,8)
-					cglong.value = r[0].lon.toString().substring(0,8);
+					ziplat.innerHTML = r[0].lat.toString().substring(0,8);
+					ziplat.value = r[0].lat.toString().substring(0,8);
+					ziplong.innerHTML = r[0].lon.toString().substring(0,8)
+					ziplong.value = r[0].lon.toString().substring(0,8);
 					cgzip.value = r[0].address.postcode.substring(0,maxlength);
-					cglibs.style.display = 'block';
+					ziplibs.style.display = 'block';
 					$res.value = r[0].address.postcode.substring(0,maxlength)+'|'+r[0].display_name+'|'+r[0].place_id+'|'+r[0].geo_point_2d[0].toString().substring(0,8)+'|'+r[0].geo_point_2d[1].toString().substring(0,8);
 				}
 			} else {
@@ -174,11 +172,11 @@ function getZipWorld(e,url,maxlength) {
 		xhr.send(null);
 	},callDelay);
 }
-function cleardisplay() {
-	city.value = "";city.innerHTML = "";
+function clearzip() {
+	zipcity.value = "";zipcity.innerHTML = "";
 	insee.value = "";insee.innerHTML = "";
 	insee.value = ""; insee.innerHTML ="" ;
-	cglong.value = ""; cglong.innerHTML = "";
-	cglat.value = "";cglat.innerHTML ="";
-	cglibs.style.display = 'none';
+	ziplong.value = ""; ziplong.innerHTML = "";
+	ziplat.value = "";ziplat.innerHTML ="";
+	ziplibs.style.display = 'none';
 }

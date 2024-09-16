@@ -1,9 +1,8 @@
 <?php
 /**
-* CG ZipCode Plugin  - Joomla 4.x Module 
-* Version			: 2.1.1
-* copyright 		: Copyright (C) 2023 ConseilGouz. All rights reserved.
-* license    		: http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
+* CG ZipCode Plugin  - Joomla 4.x/5.x
+* copyright 		: Copyright (C) 2024 ConseilGouz. All rights reserved.
+* license    		: https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
 */
 // No direct access to this file
 defined('_JEXEC') or die;
@@ -176,5 +175,17 @@ class plgfieldscgzipcodeInstallerScript
 		$db->execute();
 		Factory::getCache()->clean('_system');
 	}
-	
+    public function delete($files = [])
+    {
+        foreach ($files as $file) {
+            if (is_dir($file)) {
+                Folder::delete($file);
+            }
+
+            if (is_file($file)) {
+                File::delete($file);
+            }
+        }
+    }
+
 }

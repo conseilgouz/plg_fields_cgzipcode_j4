@@ -62,9 +62,8 @@ function getZipFr(e,url,maxlength,is_cedex) {
 	clearzip();
 	result.style.display = 'inline-flex';
 	result.innerHTML = "Chargement...";
-	timeout;
-	clearTimeout(timeout),
-	timeout=setTimeout(function(){
+	clearTimeout(ziptimeout),
+	ziptimeout=setTimeout(function(){
 		const xhr = new XMLHttpRequest();
 		xhr.open('GET', url+e+ "&rows=100", true); // Set the headers
 		xhr.onreadystatechange = () => {

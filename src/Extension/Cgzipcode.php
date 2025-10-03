@@ -14,14 +14,31 @@ defined('_JEXEC') or die;
 use Joomla\CMS\Form\Form;
 use Joomla\CMS\Form\FormHelper;
 use Joomla\Component\Fields\Administrator\Plugin\FieldsPlugin;
+use Joomla\Event\SubscriberInterface;
 /**
  * Fields Text Plugin
  *
  */
-class Cgzipcode extends FieldsPlugin
+class Cgzipcode extends FieldsPlugin implements SubscriberInterface
 {
-	public function onCustomFieldsPrepareDom($field, \DOMElement $parent, Form $form)
+    /**
+     * Returns an array of events this subscriber will listen to.
+     *
+     * @return  array
+     *
+     * @since   5.3.0
+     */
+    public static function getSubscribedEvents(): array
     {
+        return array_merge(parent::getSubscribedEvents(), [
+            'onCustomFieldsPrepareDom' => 'prepareDom',
+        ]);
+    }
+    public function prepareDom($event) //($field, \DOMElement $parent, Form $form)
+    {
+        $field = $event[0];
+        $parent = $event[1];
+        $form = $event[2];
         $fieldNode = parent::onCustomFieldsPrepareDom($field, $parent, $form);
         
         if (!$fieldNode)

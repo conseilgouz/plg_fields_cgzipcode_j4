@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <form>
 	<fields name="fieldparams">
-		<fieldset name="fieldparams" addfieldpath="/plugins/fields/cgzipcode/src/Form/Field">
+		<fieldset name="fieldparams" addfieldprefix="ConseilGouz\Library\Field">
+            <field name="version" type="version" extension="plugin/cgzipcode" margintop="-26.5em" float="right"/>
 			<field
 				name="country"
 				type="text" default="fr"

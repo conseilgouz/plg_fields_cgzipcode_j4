@@ -3,6 +3,20 @@
 		<element>cgzipcode</element>
 		<type>plugin</type>
 		<group>fields</group>
+		<version>2.2.0</version>
+        <note>
+            <item>Update : 03/10/2025</item>
+        </note>
+        <change>
+            <item>Use ConseilGouz Library</item>
+            <item>Display plugin's version</item>
+            <item>Use SubscriberInterface</item>
+        </change>
+	</changelog>
+	<changelog>
+		<element>cgzipcode</element>
+		<type>plugin</type>
+		<group>fields</group>
 		<version>2.1.2</version>
         <note>
             <item>Update : 16/09/2024</item>
